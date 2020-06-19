@@ -1,24 +1,35 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useRef, useEffect } from 'react';
 import './App.css';
 
 function App() {
+
+  const canvasRef = useRef()
+
+  const draw = () => {
+    let canvas = canvasRef.current;
+    const context = canvas.getContext('2d');
+    const player = document.getElementById('player');
+    context.drawImage(player, 0, 0, canvas.width, canvas.height)
+    player.srcObject.getVideoTracks().forEach(track => track.stop());
+  }
+
+  const constraints = {
+    video: true
+  }
+
+  navigator.mediaDevices.getUserMedia(constraints)
+    .then((stream) => {
+      const player = document.getElementById('player');
+      player.srcObject = stream;
+    });
+
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <canvas id="canvas" ref={canvasRef} style={{ width: '320px', height: '240px' }}></canvas>
+      <video id="player" controls autoplay></video>
+      <button id="capture" onClick={draw}>Capture</button>
     </div>
   );
 }
