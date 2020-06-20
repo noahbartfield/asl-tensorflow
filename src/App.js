@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import './App.css';
+import defineModel from './tfjs'
 
 function App() {
 
@@ -23,12 +24,12 @@ function App() {
       player.srcObject = stream;
     });
 
-
+    defineModel()
 
   return (
     <div className="App">
       <canvas id="canvas" ref={canvasRef} style={{ width: '320px', height: '240px' }}></canvas>
-      <video id="player" controls autoplay></video>
+      <video id="player" controls autoPlay></video>
       <button id="capture" onClick={draw}>Capture</button>
     </div>
   );
